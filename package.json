@@ -1,0 +1,40 @@
+{
+  "name": "jarbit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server/index.js",
+    "dev": "nodemon src/server/api/index.js",
+    "test": "nodemon src/server/bot/index.js"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "data.json"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antonbsa/jarbit.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antonbsa/jarbit/issues"
+  },
+  "homepage": "https://github.com/antonbsa/jarbit#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "firebase": "^9.1.0",
+    "moment": "^2.29.1",
+    "mongoose": "^6.0.12",
+    "node-telegram-bot-api": "^0.54.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/node": "^7.15.8",
+    "nodemon": "^2.0.13"
+  }
+}

@@ -1,0 +1,101 @@
+TODO:
+  ✔ fazer todo o processo mas salvando e lendo de um arquivo .json os dados que to querendo salvar;
+  ✔ adicionar a data de criação das notas;
+  ✘ testar o uso do telegraf (interação com as mensagens parece ser mais simples) - caso contrario montar a propria API do bot
+  ✔ levar esse processo pro mais proximo do objetivo (com interação e conferencia do bot);
+  ✔ definir no constructor nextTextAction e nextInlineAction, msm funcionalidade anterior
+  ✔ usar as pollings nos comandos ja existentes;
+  ✔ comando pra retornar as notas;
+  ✔ testar outro usuario enviando mensagem se n atrapalha o fluxo => deu de fato erro
+  ☐ FIREABASE:
+    ☐ PAUSA: conferir o uso
+  ☐  Mongo
+    ✔ conectar com o mongo
+    ✔ iniciar a API e o bot simultaneamente
+    ☐ achar um jeito correto de definir o ID
+  ☐ achar um jeito de contornar o tratamento de mensagem para pessoas diferentes;
+  ☐ adicionar comando /start;
+    ☐ aqui deve fazer o login pelo github (exclusivamente aqui, inicialmente) com oAuth;
+    ☐ se nao quiser via github, pegar só o chatId :: ou seja, provavelmente vai ter 3 "id" - o _id do mongo, chatId pro bot e o identificador do github
+  ☐ agora da pra fazer o commit;
+
+TASKS:
+  ☐ arquivos de tradução :: inicialmente colocar em pt-br, quando colocar em ingles aplicar isso
+  ☐ corrigir a definição dos comandos e das callbacks;
+  ☐ ANTES DO DEPLOY, conferir as questoes de ApiKey (preciso criar uma nova pro bot correto) e etc (ver se da pra criar arquivo em ambiente de desenvolvimento);
+  ☐ função logger (só printar com o debug=true)
+  ☐ checar o comando, se nao for um existente, retornar mensagem informando - conferir como checar a semelhança entre palavras pra sugerir comando;
+  ☐ criar arquivos de traduções;
+  ☐ editar as mensagens (negrito, emojis, etc)
+  ☐ paginação na listagem das notas;
+  ☐ estudar separar os tipos de mensagens em um arquivos especifico;
+  ☐ estudar como fazer - e viabilidade - de transferir o projeto de js pra TYPESCRIPT;
+  ☐ definir uma função para uma 'initMessage' para configuração (autenticação) e retorno de informações (principais comandos e uso);
+  ☐ ver sobre uma boa abordagem da 'tripa de then' em promises (pra lidar com varias respostas);
+  ☐ manipular os erros em geral ()
+  ☐ estudar o uso de uma classe mãe - tlv n seja uma boa abordagem mas melhor doq deixar repetido (https://levelup.gitconnected.com/creating-a-conversational-telegram-bot-in-node-js-with-a-finite-state-machine-and-async-await-ca44f03874f9)
+  ☐ salvar em algum lugar alguma estrutura de mensagem pra nao ter que ficar mandando e conferindo toda hora;
+  ☐ adicionar um retorno pra quando tem um novo chat member;
+  ☐ como emitir evento quando for determinado horario :: cron job;
+  ☐ ver sobre polls - ou como for chamado aquelas tags que facilita demais o uso;
+  ☐ analisar como construir uma ambiente pra testes (se precisa ou da pra usar direto esse localmente);
+  ☐ (newsletter - como o do deschamps) - integração com o gmail do usuario OU criação de um botEmail específico pra receber isso, sem poluir o pessoal;
+  ☐ talvez seja possível fazer um handler da questao anterior (lendo por ID e talvez colocando algum dado extra - i.e type: question - nessa mensagem);
+  ☐ adicionar uma mensagem se caso o usuário usar um comando que nao exista;
+
+QUESTIONS:
+  - estudar o tipo (e maneira) de salvar os dados. banco noSQL pode ser uma solução;
+  - provavelmente usar 3 bots (um pra desenv., outro pro dev-deploy e o outro o real - tlv 2 seja o suficiente);
+
+IMPORTANT FEATURES:
+  -> mensagem de "bom dia":
+    ☐ informações sobre o tempo;
+    ☐ Se vai haver jogo (adicionr times, avisar alguns dias de antecedencia *TAMBÉM*);
+      ☐ pesquisar direto no google se conseguir ler o html só, se nao tentar consumir alguma API;
+    ☐ informações do github (quantidade de notificações, (mais algo?));
+      ☐ octokit/core.js
+    ☐ informações sobre email (quantos novos, tlv quantos lidos?)
+    ☐ trending topics do twitter (opção de mundial ou do pais)
+    ☐ ultimas noticias de sites (tipo tecmundo) - aqui ver se tem algum padrao entre eles pra pegar as ultimas (ver RSS, algo assim);
+    ☐ alguma interação com o trabalho (horário do trabalho, etc)
+  -- Obs:
+    ☐ talvez adicionar algum modo de redirecionar o usuário pro serviço
+    ☐ ver sobre node-schedule
+
+  -> sistema de tasks:
+    - conferir se é util isso, caso contrário nao dicionar (elaborar melhor os casos de uso);
+
+  -> lembretes:
+    - exemplo da agua: definir lembrete, frequencia, horario
+    - poder pausar por tanto tempo, ou até tal dia, ou indeterminado ou cancelar/excluir
+
+  -> sistema de metas:
+    - adiciona metas com um prazo (tal dia ou prazo maximo);
+    - informar as metas em aberto e as atrasadas;
+    - trazer isso na mensagem inicial do dia e estudar a possibilidade de informar mais vezes ao dia;
+    - diferenciar metas pessoais e metas de trabalho;
+
+  -> anotações de filmes:
+    - poder anotar sugestoes de filmes;
+    - estudar possibilidade de sugerir filmes;
+
+  -> job:
+    - um pode ser o restingTime, que tu coloca hora de inicio, inicio e parada de pausas e define o tempo de trabalho do dia (focado para trabalhos dinamicos) 
+  
+  -> Outro comandos:
+    ☐ /help - lista todos os comandos possíveis (deixar dinâmico);
+    ☐ /config - mostra as configs (podendo alterar);
+    ☐ /notes - tudo sobre as notas;
+      ☐ esse comando limpo deve perguntar oq quer fazer (criar, editar ou listar - usar aquelas polls)
+
+DOC:
+  -- (documentar o progresso)
+  - dificuldades:
+    - um dos primeiros problemas que tive foi com o tratamento da conversa (bot recebe uma resposta e lida com ela) com diferentes usuários.
+    - como inicialmente instanciava uma classe pro bot e salvava em um atributo a proxima ação (uma função que recebia a mensagem por parametro)
+    - o bot nao diferenciava de quem que estava recebendo (só responderia pra pessoa certa); poderia corrigir isso deixando salvo nesse atributo 
+    - uma chave com o id do chat e então a ação, mas nitidamente nao seria a melhor abordagem;
+  == stack inicial ==
+  - sistema de web scrapping;
+  - consumo de API's;
+  - desenvolvimento de bot;
