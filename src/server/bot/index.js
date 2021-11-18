@@ -7,7 +7,6 @@ if (!token) throw new Error('you need to provide the API TOKEN on .env file');
 
 function initBot() {
   const bot = new Bot(token, { polling: true });
-  console.log('= bot initiated')
 
   //TODO: mudar o nome da varivel debaixo
   const commandsArray = commands.map(e => {
@@ -39,7 +38,7 @@ function initBot() {
     const msgText = msg.text;
 
     const searchCommand = bot.checkCommand(msgText);
-    if (searchCommand?.command == 'cancel') {
+    if (searchCommand.command == 'cancel') {
       searchCommand.action(msg, bot);
       return;
     }
@@ -66,6 +65,7 @@ function initBot() {
       }
     }
   });
+  console.log('🤖 Bot initiated');
 }
 
 module.exports = exports = initBot;

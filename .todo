@@ -7,19 +7,29 @@ TODO:
   ✔ usar as pollings nos comandos ja existentes;
   ✔ comando pra retornar as notas;
   ✔ testar outro usuario enviando mensagem se n atrapalha o fluxo => deu de fato erro
-  ☐ FIREABASE:
+  Firebase:
     ☐ PAUSA: conferir o uso
-  ☐  Mongo
+  Mongo:
     ✔ conectar com o mongo
     ✔ iniciar a API e o bot simultaneamente
     ☐ achar um jeito correto de definir o ID
-  ☐ achar um jeito de contornar o tratamento de mensagem para pessoas diferentes;
-  ☐ adicionar comando /start;
+  Consumo da Api:
+    ✔ consumir as requisições da API;
+    ✔ rodar simultaneo mais coisas (bot, api, front);
+  ✔ Schema composto (uma das chaves do dado a se salvar vai ter seu proprio schema/padrao/tipagem);
+  Foco:
+    ☐ salvar o chatID no mongo
+    ☐ correções basicas no mongo (nome de banco e etc);
+    ☐ contornar o tratamento de mensagem para pessoas diferentes;
+      ☐ request pela API, confere o ID e se ta esperando resposta - campo no mongo;
+    ☐ salvar num objeto grandao o id do usuario e a função de resposta
+    ☐ definir um timeout pra zerar essa função caso nao receba retorno - limpa o campo
+    ☐ adicionar comando /start;
     ☐ aqui deve fazer o login pelo github (exclusivamente aqui, inicialmente) com oAuth;
     ☐ se nao quiser via github, pegar só o chatId :: ou seja, provavelmente vai ter 3 "id" - o _id do mongo, chatId pro bot e o identificador do github
-  ☐ agora da pra fazer o commit;
-
+    ☐ agora da pra fazer o commit;
 TASKS:
+  ☐ fazer o schema das anotações e demais que ja sei
   ☐ arquivos de tradução :: inicialmente colocar em pt-br, quando colocar em ingles aplicar isso
   ☐ corrigir a definição dos comandos e das callbacks;
   ☐ ANTES DO DEPLOY, conferir as questoes de ApiKey (preciso criar uma nova pro bot correto) e etc (ver se da pra criar arquivo em ambiente de desenvolvimento);

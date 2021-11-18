@@ -1,22 +1,26 @@
 require('dotenv').config();
 
 const initBot = require('../bot/index');
-//TODO fixme
-if (true) initBot();
 
 const express = require('express');
-
 const routes = require('./routes');
-const connectToDatabase = require('./service/database');
 
+const connectToDatabase = require('./service/database');
 connectToDatabase();
 
 const app = express();
 const port = 3000
 
 app.use(express.json());
-app.use(routes);
+app.use('/api', routes);
+
+app.get('/', (req, res) => {
+  res.send('Hello World');
+})
 
 app.listen(port, () => {
-  console.log(`rodando em https://localhost:${port}`)
+  //TODO: deixar dinamico
+  console.log(`⚡ Running in http://localhost:${port}`);
 });
+
+if (process.env.BOT_API_TOKEN) initBot();
