@@ -1,10 +1,10 @@
 const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema({
-  _id: {
+  /* _id: {
     type: String,
     required: true,
-  },
+  }, */
   chatId: {
     type: Number,
     required: false,
@@ -12,7 +12,9 @@ const userSchema = new Schema({
   name: {
     type: String,
     required: true,
-  },
+  }
+}, {
+  timestamps: true
 });
 
 module.exports = model('User', userSchema);

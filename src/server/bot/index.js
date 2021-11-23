@@ -10,7 +10,7 @@ function initBot() {
 
   //TODO: mudar o nome da varivel debaixo
   const commandsArray = commands.map(e => {
-    const { command, description } = e
+    const { command, description } = e;
     return {
       command,
       description,
@@ -36,6 +36,9 @@ function initBot() {
     //TODO: check the change from excessive if/else to if/return
     const chatId = msg.chat.id;
     const msgText = msg.text;
+    console.log(msg)
+
+    // Check if user is registered
 
     const searchCommand = bot.checkCommand(msgText);
     if (searchCommand.command == 'cancel') {

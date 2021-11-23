@@ -21,9 +21,13 @@ TODO:
     ☐ salvar o chatID no mongo
     ☐ correções basicas no mongo (nome de banco e etc);
     ☐ contornar o tratamento de mensagem para pessoas diferentes;
-      ☐ request pela API, confere o ID e se ta esperando resposta - campo no mongo;
+    ☐ request pela API, confere o ID e se ta esperando resposta - campo no mongo;
     ☐ salvar num objeto grandao o id do usuario e a função de resposta
+    ☐ criar o oauth
     ☐ definir um timeout pra zerar essa função caso nao receba retorno - limpa o campo
+    Oauth:
+      ☐ fazer a chamada
+      ☐ conseguir acesso com o usuario
     ☐ adicionar comando /start;
     ☐ aqui deve fazer o login pelo github (exclusivamente aqui, inicialmente) com oAuth;
     ☐ se nao quiser via github, pegar só o chatId :: ou seja, provavelmente vai ter 3 "id" - o _id do mongo, chatId pro bot e o identificador do github

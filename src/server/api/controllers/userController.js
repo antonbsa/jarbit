@@ -18,7 +18,7 @@ async function store(req, res) {
 
     const user = new User({
       //TODO: escolher o tipo de definição de id
-      _id: 1,
+      // _id: 1,
       name
     });
 
