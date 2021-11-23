@@ -3,7 +3,8 @@ require('dotenv').config();
 const initBot = require('../bot/index');
 
 const express = require('express');
-const routes = require('./routes');
+const apiRoutes = require('./api.routes');
+const userRoutes = require('./routes/user.routes');
 
 const connectToDatabase = require('./service/database');
 connectToDatabase();
@@ -12,7 +13,8 @@ const app = express();
 const port = 3000
 
 app.use(express.json());
-app.use('/api', routes);
+app.use('/api', apiRoutes);
+apiRoutes.use('/user', userRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World');
