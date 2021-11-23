@@ -11,19 +11,30 @@ async function index(req, res) {
 
 async function store(req, res) {
   try {
-    const { name } = req.body;
-    if (!name) {
-      return res.sttus(400).json({ error: 'Missing name' });
-    }
+    const { first_name, last_name, chatId, language } = req.body;
+    if (!first_name) return res.status(400).json({ error: 'Missing first_name' });
 
     const user = new User({
-      //TODO: escolher o tipo de definição de id
-      // _id: 1,
-      name
+      first_name,
+      last_name,
+      chatId,
+      language
     });
 
     await user.save();
-    return res.status(201).json({ message: 'user added succesfully!' });
+    return res.status(201).json({ message: 'User added succesfully!' });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
+async function checkChatId(req, res) {
+  try {
+    const chatId = req.params.id;
+    if (!chatId) return res.status(400).json({ message: 'Missing chatId' });
+
+    const user = await User.findOne({ chatId });
+    return res.status(200).json({ data: (user) ? user : false });
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
@@ -31,5 +42,6 @@ async function store(req, res) {
 
 module.exports = {
   index,
-  store
+  store,
+  checkChatId,
 }

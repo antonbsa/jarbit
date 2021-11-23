@@ -9,9 +9,17 @@ const userSchema = new Schema({
     type: Number,
     required: false,
   },
-  name: {
+  language: {
+    type: String,
+    required: false
+  },
+  first_name: {
     type: String,
     required: true,
+  },
+  last_name: {
+    type: String,
+    required: false,
   }
 }, {
   timestamps: true

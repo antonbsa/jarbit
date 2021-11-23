@@ -1,5 +1,7 @@
 const fs = require('fs');
 
+const api = require('../services/api');
+
 const allCommands = [];
 //TODO: Melhorar onde vai ficar atribuido isso
 const defaultOptions = [
@@ -46,6 +48,35 @@ setCommand('teste', 'usado para testes', async (msg, bot) => {
     const resp = parseInt(msg.data);
     bot.sendMessage(chatId, `recebi: ${!!resp}`);
   })
+})
+
+setCommand('start', 'initial setup', async (msg, bot) => {
+  const chatId = msg.chat.id;
+  const { data: resp } = await api.get(`/api/check-chatid/${chatId}`);
+
+  if (!resp.data) {
+    await bot.sendInlineMessage(chatId, 'Parece que você é novo por aqui! Vou salvar seus dados inicias, ok?', defaultOptions);
+    bot.setNextInlineAction(async (msg) => {
+      const msgData = parseInt(msg.data);
+      if (!!msgData) {
+        const { first_name, last_name, id: chatId, language_code: language } = msg.from;
+        const { status } = await api.post('/api/store', {
+          first_name,
+          last_name,
+          chatId,
+          language,
+        });
+
+        if (status == 201) {
+          await bot.sendMessage(chatId, 'Dados salvos!');
+        }
+      } else {
+        await bot.sendMessage(chatId, 'Ok!');
+      }
+    })
+  } else {
+    await bot.sendMessage(chatId, 'Já sei seus dados iniciais! Está precisando de alguma ajuda? O comando /help pode ser útil');
+  }
 })
 
 setCommand('brinks', 'só uma brinks', (msg, bot) => {
@@ -203,9 +234,9 @@ setCommand('note', 'ver a desc', async (msg, bot) => {
             let listedNotesMsg = '===============';
             userData.notes.forEach(elem => {
               listedNotesMsg += '\n' +
-              `"${elem.text}"\n` +
-              `Adicionda em: ${elem.date}\n` +
-              '===============';
+                `"${elem.text}"\n` +
+                `Adicionda em: ${elem.date}\n` +
+                '===============';
             });
             await bot.sendMessage(chatId, listedNotesMsg);
           } else {

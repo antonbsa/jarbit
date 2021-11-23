@@ -15,5 +15,6 @@ routes.get('/test', (req, res) =>{
 
 routes.get('/index', userController.index);
 routes.post('/store', userController.store);
+routes.get('/check-chatid/:id', userController.checkChatId);
 
 module.exports = routes;
