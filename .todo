@@ -12,7 +12,7 @@ TODO:
   Mongo:
     ✔ conectar com o mongo
     ✔ iniciar a API e o bot simultaneamente
-    ☐ achar um jeito correto de definir o ID
+    ✔ achar um jeito correto de definir o ID
   Consumo da Api:
     ✔ consumir as requisições da API;
     ✔ rodar simultaneo mais coisas (bot, api, front);
@@ -29,6 +29,7 @@ TODO:
     ☐ transformar o bot em um webhook
     ☐ completar o middleware
     ☐ talvez vou ter que separar os package.json do client e do server :: só conferindo na hora de fazer deploy do monorepo
+    ☐ adicionar campo de fuso-horario
     Oauth:
       ☐ fazer a chamada
       ☐ conseguir acesso com o usuario
