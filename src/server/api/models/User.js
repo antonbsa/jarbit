@@ -11,7 +11,7 @@ const userSchema = new Schema({
   },
   language: {
     type: String,
-    required: false
+    required: false,
   },
   first_name: {
     type: String,
@@ -20,6 +20,10 @@ const userSchema = new Schema({
   last_name: {
     type: String,
     required: false,
+  },
+  is_waiting_action: {
+    type: Boolean,
+    default: false,
   }
 }, {
   timestamps: true

@@ -40,8 +40,19 @@ async function checkChatId(req, res) {
   }
 }
 
+async function setWaitingAction(req, res) {
+  try {
+    const { waitingValue } = req.body;
+    if (!waitingValue) return res.status(400).json({ message: 'Missing waiting value' });
+
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+}
+
 module.exports = {
   index,
   store,
   checkChatId,
+  setWaitingAction,
 }

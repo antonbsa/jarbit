@@ -11,7 +11,4 @@ apiRoutes.get('/test', (req, res) =>{
   res.status(200).json({ test: 'dale' });
 });
 
-// Answer
-apiRoutes.post('/test');
-
 module.exports = apiRoutes;
