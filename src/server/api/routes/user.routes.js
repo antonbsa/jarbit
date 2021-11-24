@@ -11,5 +11,6 @@ userRoutes.get('/', (req, res) => {
 userRoutes.get('/index', userController.index);
 userRoutes.post('/store', userController.store);
 userRoutes.get('/check-chatid/:id', userController.checkChatId);
+userRoutes.post('/set-waiting-value', userController.setIsWaitingValue);
 
 module.exports = userRoutes;

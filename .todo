@@ -27,6 +27,7 @@ TODO:
     ☐ definir um timeout pra zerar essa função caso nao receba retorno - limpa o campo
     ☐ correções basicas no mongo (nome de banco e etc);
     ☐ transformar o bot em um webhook
+    ☐ completar o middleware
     ☐ talvez vou ter que separar os package.json do client e do server :: só conferindo na hora de fazer deploy do monorepo
     Oauth:
       ☐ fazer a chamada

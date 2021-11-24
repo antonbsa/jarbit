@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const { v4:uuid } = require('uuid');
+const { v4: uuid } = require('uuid');
 
 async function index(req, res) {
   try {
@@ -42,11 +42,23 @@ async function checkChatId(req, res) {
   }
 }
 
-async function setWaitingAction(req, res) {
+async function setIsWaitingValue(req, res) {
   try {
-    const { waitingValue } = req.body;
-    if (!waitingValue) return res.status(400).json({ message: 'Missing waiting value' });
+    const { _id, chatId, waitingValue } = req.body;
 
+    if (waitingValue === undefined) return res.status(400).json({ message: 'Missing waiting value' });
+    if (typeof waitingValue !== 'boolean') return res.status(400).json({ message: 'Wrong waiting value type' });
+    if (!_id && !chatId) return res.status(400).json({ message: 'Missing user ID or chat ID' });
+
+    const userCondition = _id ? { _id } : { chatId };
+    const user = await User.findOne(userCondition);
+
+    if (!user) return res.status(400).json({ message: 'No user found' });
+
+    user.is_waiting_action = waitingValue;
+    await user.save();
+
+    return res.status(200).json({ message: 'Waiting value has been updated!' });
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
@@ -56,5 +68,5 @@ module.exports = {
   index,
   store,
   checkChatId,
-  setWaitingAction,
+  setIsWaitingValue,
 }
