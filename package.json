@@ -31,7 +31,8 @@
     "firebase": "^9.1.0",
     "moment": "^2.29.1",
     "mongoose": "^6.0.12",
-    "node-telegram-bot-api": "^0.54.0"
+    "node-telegram-bot-api": "^0.54.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",

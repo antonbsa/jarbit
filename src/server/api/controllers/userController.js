@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const { v4:uuid } = require('uuid');
 
 async function index(req, res) {
   try {
@@ -15,6 +16,7 @@ async function store(req, res) {
     if (!first_name) return res.status(400).json({ error: 'Missing first_name' });
 
     const user = new User({
+      _id: uuid(),
       first_name,
       last_name,
       chatId,

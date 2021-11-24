@@ -52,7 +52,7 @@ setCommand('teste', 'usado para testes', async (msg, bot) => {
 
 setCommand('start', 'initial setup', async (msg, bot) => {
   const chatId = msg.chat.id;
-  const { data: resp } = await api.get(`/api/check-chatid/${chatId}`);
+  const { data: resp } = await api.get(`/api/user/check-chatid/${chatId}`);
 
   if (!resp.data) {
     await bot.sendInlineMessage(chatId, 'Parece que você é novo por aqui! Vou salvar seus dados inicias, ok?', defaultOptions);
@@ -60,7 +60,7 @@ setCommand('start', 'initial setup', async (msg, bot) => {
       const msgData = parseInt(msg.data);
       if (!!msgData) {
         const { first_name, last_name, id: chatId, language_code: language } = msg.from;
-        const { status } = await api.post('/api/store', {
+        const { status } = await api.post('/api/user/store', {
           first_name,
           last_name,
           chatId,
