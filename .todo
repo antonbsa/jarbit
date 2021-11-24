@@ -30,13 +30,15 @@ TODO:
     ☐ completar o middleware
     ☐ talvez vou ter que separar os package.json do client e do server :: só conferindo na hora de fazer deploy do monorepo
     ☐ adicionar campo de fuso-horario
+    ☐ rever sobre o campo de is_waiting_answer. Da atual maneira que é controlado, não precisa dele
     Oauth:
       ☐ fazer a chamada
       ☐ conseguir acesso com o usuario
     ☐ adicionar comando /start;
     ☐ aqui deve fazer o login pelo github (exclusivamente aqui, inicialmente) com oAuth;
     ☐ se nao quiser via github, pegar só o chatId :: ou seja, provavelmente vai ter 3 "id" - o _id do mongo, chatId pro bot e o identificador do github
-    ☐ agora da pra fazer o commit;
+    ☐ corrigir todos os "todo" comments
+    ☐ agora da pra fazer a release;
 TASKS:
   ☐ fazer o schema das anotações e demais que ja sei
   ☐ arquivos de tradução :: inicialmente colocar em pt-br, quando colocar em ingles aplicar isso
