@@ -20,6 +20,27 @@ class Bot extends TelegramBot {
         if (log) console.error(...log);
       }
     }
+
+    this.nextAction = {};
+    // this.nextAction = {
+    //   "chatId": {
+    //     action: () => { },
+    //     timeoutId: 123,
+    //     type: 'inline/text'
+    //   }
+    // };
+  }
+
+  clearNextAction(chatId) {
+    delete this.nextAction[chatId];
+  }
+
+  setActionTimeout(chatId) {
+    const timeoutId = setTimeout((id) => {
+      this.clearNextAction(id);
+    }, 45 * 1000, chatId);  // 45 seconds
+
+    this.nextAction[chatId].timeoutId = timeoutId;
   }
 
   baseLog() {
@@ -31,26 +52,19 @@ class Bot extends TelegramBot {
     }
   }
 
-  setNextTextAction(func) {
-    this.nextInlineAction = null;
-    this.nextTextAction = func;
+  setNextAction(chatId, type, action) {
+    this.nextAction[chatId] = {
+      action,
+      type
+    }
+    this.setActionTimeout(chatId);
   }
 
-  async handleNextTextAction(msg) {
-    const handler = this.nextTextAction;
-    this.nextTextAction = null;
-    await handler(msg);
-  }
-
-  setNextInlineAction(func) {
-    this.nextTextAction = null;
-    this.nextInlineAction = func;
-  }
-
-  async handleNextInlineAction(msg) {
-    const handler = this.nextInlineAction;
-    this.nextInlineAction = null;
-    await handler(msg);
+  async handleNextAction(chatId, msg) {
+    clearTimeout(this.nextAction[chatId].timeoutId);
+    const handleAction = this.nextAction[chatId].action;
+    this.clearNextAction(chatId);
+    await handleAction(msg);
   }
 
   async cleanMarkupEntities(chatId) {

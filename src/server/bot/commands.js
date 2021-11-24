@@ -1,5 +1,4 @@
 const fs = require('fs');
-
 const api = require('../services/api');
 
 const allCommands = [];
@@ -43,11 +42,11 @@ setCommand('teste', 'usado para testes', async (msg, bot) => {
    */
   await bot.sendInlineMessage(chatId, 'testezin', defaultOptions);
 
-  bot.setNextInlineAction(async (msg) => {
+  bot.setNextAction(chatId, 'inline', async (msg) => {
     console.log('data: ', msg.data)
     const resp = parseInt(msg.data);
-    bot.sendMessage(chatId, `recebi: ${!!resp}`);
-  })
+    await bot.sendMessage(chatId, `recebi: ${!!resp}`);
+  });
 })
 
 setCommand('start', 'initial setup', async (msg, bot) => {
@@ -56,7 +55,7 @@ setCommand('start', 'initial setup', async (msg, bot) => {
 
   if (!resp.data) {
     await bot.sendInlineMessage(chatId, 'Parece que você é novo por aqui! Vou salvar seus dados inicias, ok?', defaultOptions);
-    bot.setNextInlineAction(async (msg) => {
+    bot.setNextAction(chatId, 'inline', async (msg) => {
       const msgData = parseInt(msg.data);
       if (!!msgData) {
         const { first_name, last_name, id: chatId, language_code: language } = msg.from;
@@ -79,51 +78,51 @@ setCommand('start', 'initial setup', async (msg, bot) => {
   }
 })
 
-setCommand('brinks', 'só uma brinks', (msg, bot) => {
+setCommand('brinks', 'só uma brinks', async (msg, bot) => {
   const chatId = msg.chat.id;
   const secretWord = 'LINDEZA'
-  bot.sendMessage(chatId, `Teste de mensagem, envie ${secretWord}`);
-  bot.nextTextAction = (msg) => {
+  await bot.sendMessage(chatId, `Teste de mensagem, envie ${secretWord}`);
+  bot.setNextAction(chatId, 'text', async (msg) => {
     if (msg.text.split(' ').some((e) => e.toUpperCase() == secretWord && e != secretWord)) {
-      bot.sendMessage(chatId, 'quase ein. me atento aos detalhes ... tenta de novo ai cpx');
+      await bot.sendMessage(chatId, 'quase ein. me atento aos detalhes ... tenta de novo ai cpx');
       return;
     }
     if (msg.text.split(' ').some((e) => e === secretWord)) {
-      bot.sendMessage(chatId, 'ACERTOU MIZERAVI!!');
+      await bot.sendMessage(chatId, 'ACERTOU MIZERAVI!!');
     } else {
-      bot.sendMessage(chatId, 'errou papai, tenta dnv');
+      await bot.sendMessage(chatId, 'errou papai, tenta dnv');
     }
-  }
+  })
 })
 
 // test commands
 setCommand('adicionar', 'adiciona algum coisa', async (msg, bot) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, 'responda com algo');
-  bot.nextTextAction = (msg) => {
+  await bot.sendMessage(chatId, 'responda com algo');
+  bot.setNextAction(chatId, 'text', async (msg) => {
     bot.sendInlineMessage(chatId, `voce mandou ${msg.text}?`, defaultOptions);
-    bot.nextInlineAction = (msg) => {
+    bot.setNextAction(chatId, 'inline', async (msg) => {
       const data = parseInt(msg.data);
       if (!!data) {
-        bot.sendMessage(chatId, 'Dale!!')
+        await bot.sendMessage(chatId, 'Dale!!')
       } else {
-        bot.sendMessage(chatId, 'Osh..')
+        await bot.sendMessage(chatId, 'Osh..')
       }
-    }
-  }
-})
+    });
+  });
+});
 
 // Mainly commands
 setCommand('cancel', 'cancela qualquer operação', async (msg, bot) => {
   const chatId = msg.chat.id;
   console.log('== aqui:', bot.nextTextAction);
   if (!bot.nextTextAction && !bot.nextInlineAction) {
-    bot.sendMessage(chatId, 'Nenhuma operação em andamento para ser cancelada');
+    await bot.sendMessage(chatId, 'Nenhuma operação em andamento para ser cancelada');
     return;
   } else {
     bot.nextTextAction = null;
     if (bot.lastInlineMessageId) await bot.cleanMarkupEntities(chatId);
-    bot.sendMessage(chatId, 'Cancelando operação.');
+    await bot.sendMessage(chatId, 'Cancelando operação.');
   }
 })
 
@@ -221,12 +220,12 @@ setCommand('note', 'ver a desc', async (msg, bot) => {
       ]
     ]
     bot.sendInlineMessage(chatId, 'o que queres fazer?', options);
-    bot.setNextInlineAction(async (msg) => {
+    bot.setNextAction(chatId, 'inline', async (msg) => {
       const msgData = msg.data;
       switch (msgData) {
         case 'add':
           await bot.sendMessage(chatId, 'Envie a nota que deseja salvar');
-          bot.setNextTextAction(checkAndSaveNote);
+          bot.setNextAction(chatId, 'text', checkAndSaveNote);
           break;
         case 'list':
           const userData = data.find(e => e.chatId === chatId);
@@ -241,11 +240,11 @@ setCommand('note', 'ver a desc', async (msg, bot) => {
             await bot.sendMessage(chatId, listedNotesMsg);
           } else {
             await bot.sendInlineMessage(chatId, 'Nenhuma nota adicionada ainda. Deseja adicionar uma agora?', defaultOptions);
-            bot.setNextInlineAction(async (msg) => {
+            bot.setNextAction(chatId, 'inline', async (msg) => {
               const msgData = parseInt(msg.data);
               if (!!msgData) {
                 await bot.sendMessage(chatId, 'Envie a nota que deseja salvar');
-                bot.setNextTextAction(checkAndSaveNote);
+                bot.setNextAction(chatId, 'text', checkAndSaveNote);
               } else {
                 bot.sendMessage(chatId, 'Ok!');
               }
@@ -263,17 +262,17 @@ setCommand('note', 'ver a desc', async (msg, bot) => {
 setCommand('help', 'uma lista do que eu posso te ajudar', async (msg, bot) => {
   const chatId = msg.chat.id;
   // bot.sendMessage(chatId, `Comandos disponíveis: ${allCommands.map(e => e.command).toString(' ')}`);
-  bot.sendMessage(chatId, 'Ainda preciso adicionar essa funcionalidade...');
+  await bot.sendMessage(chatId, 'Ainda preciso adicionar essa funcionalidade...');
 })
 
-setCommand('echo', 'só repito o que você mandar', (msg, bot) => {
+setCommand('echo', 'só repito o que você mandar', async (msg, bot) => {
   const chatId = msg.chat.id;
   const text = bot.removeCommand(msg.text);
   if (!text) {
-    bot.sendMessage(chatId, 'nada para repetir :D');
+    await bot.sendMessage(chatId, 'nada para repetir :D');
     return;
   }
-  bot.sendMessage(chatId, text);
+  await bot.sendMessage(chatId, text);
 })
 
 module.exports = exports = allCommands;

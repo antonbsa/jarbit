@@ -25,7 +25,7 @@ function initBot() {
     const chatId = message.chat.id;
     console.log('dentro callbck handler: ', msg)
     try {
-      await bot.handleNextInlineAction(msg);
+      await bot.handleNextAction(chatId, msg);
     } catch (err) {
       bot.sendMessage(chatId, `deu erro: ${err.message}`);
     }
@@ -36,24 +36,23 @@ function initBot() {
     //TODO: check the change from excessive if/else to if/return
     const chatId = msg.chat.id;
     const msgText = msg.text;
-    console.log(msg)
+    const nextAction = bot.nextAction[chatId];
 
-    // Check if user is registered
+    //! Check if user is registered :: maybe not here
 
     const searchCommand = bot.checkCommand(msgText);
-    if (searchCommand.command == 'cancel') {
+    if (searchCommand?.command == 'cancel') {
       searchCommand.action(msg, bot);
       return;
     }
 
-    if (bot.nextInlineAction) {
-      console.log(bot.nextInlineAction)
+    if (nextAction?.type == 'inline') {
       bot.sendMessage(chatId, 'Estava esperando uma poll, vou cancelar ela.');
       await bot.cleanMarkupEntities(chatId);
     }
 
-    if (bot.nextTextAction) {
-      bot.handleNextTextAction(msg);
+    if (nextAction) {
+      bot.handleNextAction(chatId, msg);
       console.log('== TAVA ESPERANDO!');
     } else {
       console.log('ta nao');
