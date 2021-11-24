@@ -20,9 +20,9 @@ TODO:
   Foco:
     ✔ salvar o chatID no mongo
     ✔ adicionar a language/locale do usuário
-    ☐ contornar o tratamento de mensagem para pessoas diferentes;
+    ✔ contornar o tratamento de mensagem para pessoas diferentes;
+    ✔ salvar num objeto grandao o id do usuario e a função de resposta
     ☐ request pela API, confere o ID e se ta esperando resposta - campo no mongo;
-    ☐ salvar num objeto grandao o id do usuario e a função de resposta
     ☐ criar o oauth
     ☐ definir um timeout pra zerar essa função caso nao receba retorno - limpa o campo
     ☐ correções basicas no mongo (nome de banco e etc);
