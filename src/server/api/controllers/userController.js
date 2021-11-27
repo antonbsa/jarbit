@@ -12,7 +12,7 @@ async function index(req, res) {
 
 async function store(req, res) {
   try {
-    const { first_name, last_name, chatId, language } = req.body;
+    const { first_name, last_name, chatId, language, authentications } = req.body;
     if (!first_name) return res.status(400).json({ error: 'Missing first_name' });
 
     const user = new User({
@@ -20,7 +20,8 @@ async function store(req, res) {
       first_name,
       last_name,
       chatId,
-      language
+      language,
+      authentications,
     });
 
     await user.save();
