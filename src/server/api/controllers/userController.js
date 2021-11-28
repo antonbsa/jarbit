@@ -35,12 +35,12 @@ async function store(req, res) {
 async function checkChatId(req, res) {
   try {
     const chatId = req.params.id;
-    if (!chatId) {
-      return res.status(400).json({ message: 'Missing chatId' });
+    const user = await User.findOne({ chatId });
+    if (!user) {
+      return res.status(400).json({ success: false, error: 'User not found' });
     }
 
-    const user = await User.findOne({ chatId });
-    return res.status(200).json({ data: (user) ? user : false });
+    return res.status(200).json({ success: true, data: user });
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
