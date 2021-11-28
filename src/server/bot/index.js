@@ -42,8 +42,6 @@ function initBot() {
 
     const searchCommand = bot.checkCommand(msgText);
     if (searchCommand?.command == 'cancel') {
-      bot.clearNextAction(chatId);
-      bot.clearInlineMessage(chatId);
       return searchCommand.action(msg, bot);
     }
 

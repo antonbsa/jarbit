@@ -115,13 +115,13 @@ setCommand('adicionar', 'adiciona algum coisa', async (msg, bot) => {
 // Mainly commands
 setCommand('cancel', 'cancela qualquer operação', async (msg, bot) => {
   const chatId = msg.chat.id;
-  console.log('== aqui:', bot.nextTextAction);
-  if (!bot.nextTextAction && !bot.nextInlineAction) {
-    await bot.sendMessage(chatId, 'Nenhuma operação em andamento para ser cancelada');
-    return;
+
+  if (!bot.nextAction[chatId]) {
+    return bot.sendMessage(chatId, 'Nenhuma operação em andamento para ser cancelada');
   } else {
-    bot.nextTextAction = null;
-    if (bot.lastInlineMessageId) await bot.cleanMarkupEntities(chatId);
+    if (bot.inlineMessages[chatId]) await bot.cleanMarkupEntities(chatId);
+
+    bot.clearNextAction(chatId);
     await bot.sendMessage(chatId, 'Cancelando operação.');
   }
 })
