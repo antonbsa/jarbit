@@ -12,16 +12,17 @@ async function index(req, res) {
 
 async function store(req, res) {
   try {
-    const { first_name, last_name, chatId, language, authentications } = req.body;
-    if (!first_name) return res.status(400).json({ error: 'Missing first_name' });
+    const { firstName, lastName, chatId, language } = req.body;
+    if (!firstName) {
+      return res.status(400).json({ success: false, error: 'Missing first name argument' });
+    }
 
     const user = new User({
-      _id: uuid(),
-      first_name,
-      last_name,
+      userId: uuid(),
+      firstName,
+      lastName,
       chatId,
       language,
-      authentications,
     });
 
     await user.save();
@@ -34,7 +35,9 @@ async function store(req, res) {
 async function checkChatId(req, res) {
   try {
     const chatId = req.params.id;
-    if (!chatId) return res.status(400).json({ message: 'Missing chatId' });
+    if (!chatId) {
+      return res.status(400).json({ message: 'Missing chatId' });
+    }
 
     const user = await User.findOne({ chatId });
     return res.status(200).json({ data: (user) ? user : false });
@@ -45,23 +48,29 @@ async function checkChatId(req, res) {
 
 async function setIsWaitingValue(req, res) {
   try {
-    const { _id, chatId, waitingValue } = req.body;
+    const { userId, waitingValue } = req.body;
 
-    if (waitingValue === undefined) return res.status(400).json({ message: 'Missing waiting value' });
-    if (typeof waitingValue !== 'boolean') return res.status(400).json({ message: 'Wrong waiting value type' });
-    if (!_id && !chatId) return res.status(400).json({ message: 'Missing user ID or chat ID' });
+    if (waitingValue === undefined) {
+      return res.status(400).json({ success: false, error: 'Missing waiting value' });
+    }
+    if (typeof waitingValue !== 'boolean') {
+      return res.status(400).json({ success: false, error: 'Wrong waiting value type' });
+    }
+    if (userId) {
+      return res.status(400).json({ success: false, error: 'Missing userId' });
+    }
 
-    const userCondition = _id ? { _id } : { chatId };
-    const user = await User.findOne(userCondition);
-
-    if (!user) return res.status(400).json({ message: 'No user found' });
+    const user = await User.findOne({ userId });
+    if (!user) {
+      return res.status(400).json({ success: false, error: 'No user found' });
+    }
 
     user.is_waiting_action = waitingValue;
     await user.save();
 
-    return res.status(200).json({ message: 'Waiting value has been updated!' });
+    return res.status(200).json({ success: true, message: 'Waiting value has been updated!' });
   } catch (err) {
-    return res.status(400).json({ error: err.message });
+    return res.status(400).json({ success: false, error: err.message });
   }
 }
 

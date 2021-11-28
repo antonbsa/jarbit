@@ -2,14 +2,17 @@ const User = require('../models/User');
 
 async function validateChatId(req, res, next) {
   const { chatId } = req.params;
-  console.log(req.query, req.params, req.body);
 
   try {
     const user = await User.findOne({ chatId });
-    console.log(user);
-    res.send(user);
+    if (!user) {
+      return res.status(400).json({ success: false, error: 'User not found' });
+    }
+
+    res.data = user;
+    next();
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    return res.status(400).json({ success: false, error: err.message });
   }
 }
 

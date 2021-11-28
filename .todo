@@ -31,7 +31,7 @@ TODO:
         ✔ testar se o mesmo token antigo funciona para as demais requests ou precisa pegar toda a vez como um middleware
       ✔ salvar o token (e mais infos) no mongo :: isso num schema do github (um objeto no mongo)
       ✔ definir os demais scopes : https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
-    ☐ user userId como id base; precisa manter o _id
+    ✔ user userId como id base; precisa manter o _id
     ☐ corrigir comando cancel
     ☐ estudar colocar um timeout no inlineMessages tb
     ☐ nao validar um dos ids, sempre o user - independente se vem ou nao do chat, precisa ter sido feito o registro antes de autenticar em algum serviço

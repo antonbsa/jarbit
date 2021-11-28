@@ -5,10 +5,6 @@ const commands = require('./commands');
 class Bot extends TelegramBot {
   constructor(token, options) {
     super(token, options);
-    this.nextTextAction = null;
-    this.lastInlineMessageId = null;
-    this.nextInlineAction = null;
-
     this.log = {
       //TODO: apply style
       info: (...args) => {
@@ -22,17 +18,33 @@ class Bot extends TelegramBot {
     }
 
     this.nextAction = {};
+    this.inlineMessages = {};
+    setInterval(() => {
+      const data = this.nextAction;
+      console.log(new Date(), ' - ', { data });
+    }, 10000);
     // this.nextAction = {
     //   "chatId": {
     //     action: () => { },
     //     timeoutId: 123,
-    //     type: 'inline/text'
+    //     type: 'inline/text',
+    //     inlineMessageId: 1231321
     //   }
     // };
   }
 
+  appendUserData(chatId, type, action) {
+    if (!this.nextAction[chatId]) this.nextAction[chatId] = {};
+    this.nextAction[chatId].action = action;
+    this.nextAction[chatId].type = type;
+  }
+
   clearNextAction(chatId) {
     delete this.nextAction[chatId];
+  }
+
+  clearInlineMessage(chatId) {
+    delete this.inlineMessages[chatId];
   }
 
   setActionTimeout(chatId) {
@@ -53,10 +65,7 @@ class Bot extends TelegramBot {
   }
 
   setNextAction(chatId, type, action) {
-    this.nextAction[chatId] = {
-      action,
-      type
-    }
+    this.appendUserData(chatId, type, action);
     this.setActionTimeout(chatId);
   }
 
@@ -68,9 +77,9 @@ class Bot extends TelegramBot {
   }
 
   async cleanMarkupEntities(chatId) {
-    await this.editMessageReplyMarkup(null, { chat_id: chatId, message_id: this.lastInlineMessageId });
-    this.lastInlineMessageId = null;
-    this.nextInlineAction = null;
+    const messageIdToClear = this.inlineMessages[chatId].messageId;
+    await this.editMessageReplyMarkup(null, { chat_id: chatId, message_id: messageIdToClear });
+    delete this.nextAction.inlineMessageId;
   }
 
   async sendInlineMessage(chatId, text, options) {
@@ -79,13 +88,15 @@ class Bot extends TelegramBot {
         inline_keyboard: options
       }
     });
-    this.lastInlineMessageId = msgSent.message_id;
+
+    this.inlineMessages[chatId] = {
+      messageId: msgSent.message_id
+    }
   }
 
   checkCommand(msgText) {
     // tratar futuramente isso
     msgText = msgText.split(' ')[0];
-    console.log({ msgText })
     return commands.find(e => msgText == `/${e.command}`);
   }
 

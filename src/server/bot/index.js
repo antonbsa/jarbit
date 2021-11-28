@@ -27,9 +27,9 @@ function initBot() {
     try {
       await bot.handleNextAction(chatId, msg);
     } catch (err) {
-      bot.sendMessage(chatId, `deu erro: ${err.message}`);
+      await bot.sendMessage(chatId, `deu erro: ${err.message}`);
     }
-    await bot.cleanMarkupEntities(chatId, msg.message_id);
+    await bot.cleanMarkupEntities(chatId, msg.message.message_id);
   })
 
   bot.on('message', async (msg) => {
@@ -42,13 +42,15 @@ function initBot() {
 
     const searchCommand = bot.checkCommand(msgText);
     if (searchCommand?.command == 'cancel') {
-      searchCommand.action(msg, bot);
-      return;
+      bot.clearNextAction(chatId);
+      bot.clearInlineMessage(chatId);
+      return searchCommand.action(msg, bot);
     }
 
     if (nextAction?.type == 'inline') {
       bot.sendMessage(chatId, 'Estava esperando uma poll, vou cancelar ela.');
-      await bot.cleanMarkupEntities(chatId);
+      bot.clearNextAction(chatId);
+      return bot.cleanMarkupEntities(chatId);
     }
 
     if (nextAction) {

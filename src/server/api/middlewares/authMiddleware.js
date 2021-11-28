@@ -1,27 +1,26 @@
+const { validate: isUuid } = require('uuid');
 const User = require('../models/User');
 
-async function validateSomeId(req, res, next) {
-  const { chatId, userId } = req.query;
+async function validateUserId(req, res, next) {
+  const { userId } = req.query;
 
-  if (userId) {
-    const user = await User.findOne({ _id: userId });
-
-    if (!user) return res.status(400).json({ success: false, message: 'nao achou usuario com o _id' });
-    res.data = userId;
-
-    next()
-  } else if (chatId) {
-    const user = await User.findOne({ chatId: parseInt(chatId) });
-
-    if (!user) return res.status(400).json({ success: false, message: 'nao achou usuario com o chatId' });
-    res.data = user._id;
-
-    next()
-  } else {
-    return res.status(400).json({ success: false, message: 'algum dado precisa ser passado' })
+  if (!userId) {
+    return res.status(400).json({ success: false, message: 'Missing ID' });
   }
+  if (!isUuid(userId)) {
+    return res.status(400).json({ success: false, message: 'Invalid ID' });
+  }
+
+  try {
+    const user = await User.findOne({ userId });
+    if (!user) return res.status(400).json({ success: false, message: 'User not found' });
+  } catch (err) {
+    return res.status(400).json({ success: false, error: err.message });
+  }
+  res.data = userId;
+  next();
 }
 
 module.exports = {
-  validateSomeId
+  validateUserId
 }

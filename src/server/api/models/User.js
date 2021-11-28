@@ -23,7 +23,7 @@ const githubSchema = new Schema({
 }, { _id: false });
 
 const userSchema = new Schema({
-  _id: {
+  userId: {
     type: String,
     required: true,
   },
@@ -35,11 +35,11 @@ const userSchema = new Schema({
     type: String,
     required: false,
   },
-  first_name: {
+  firstName: {
     type: String,
     required: true,
   },
-  last_name: {
+  lastName: {
     type: String,
     required: false,
   },
