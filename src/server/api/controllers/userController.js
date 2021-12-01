@@ -37,7 +37,7 @@ async function checkChatId(req, res) {
     const chatId = req.params.id;
     const user = await User.findOne({ chatId });
     if (!user) {
-      return res.status(400).json({ success: false, error: 'User not found' });
+      return res.status(200).json({ success: false, error: 'User not found' });
     }
 
     return res.status(200).json({ success: true, data: user });

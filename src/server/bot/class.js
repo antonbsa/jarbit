@@ -21,8 +21,8 @@ class Bot extends TelegramBot {
     this.inlineMessages = {};
     setInterval(() => {
       const data = this.nextAction;
-      console.log(new Date(), ' - ', { data });
-    }, 10000);
+      console.log(new Date(), ': ', { data });
+    }, 15000);
     // this.nextAction = {
     //   "chatId": {
     //     action: () => { },
