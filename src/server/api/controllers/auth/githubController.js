@@ -1,5 +1,6 @@
 const axios = require("axios");
 const User = require('../../models/User');
+const { githubAuthClient, githubAuthSecret } = require('../../../params');
 
 const githubApiURL = 'https://api.github.com';
 const githubURL = 'https://github.com';
@@ -7,7 +8,7 @@ const githubURL = 'https://github.com';
 async function authenticate(req, res) {
   const userId = res.data;
 
-  res.redirect(`${githubURL}/login/oauth/authorize?state=${JSON.stringify({ userId })}&client_id=${process.env.DEV_GITHUB_OAUTH_CLIENT}&scope=notifications%20read:user`);
+  res.redirect(`${githubURL}/login/oauth/authorize?state=${JSON.stringify({ userId })}&client_id=${githubAuthClient}&scope=notifications%20read:user`);
 }
 
 async function oauthCallback(req, res) {
@@ -15,8 +16,8 @@ async function oauthCallback(req, res) {
   const { userId } = JSON.parse(state);
 
   const params = {
-    client_id: process.env.DEV_GITHUB_OAUTH_CLIENT,
-    client_secret: process.env.DEV_GITHUB_OAUTH_SECRET,
+    client_id: githubAuthClient,
+    client_secret: githubAuthSecret,
     code,
   }
 

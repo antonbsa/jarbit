@@ -1,12 +1,10 @@
 require('dotenv').config();
 const Bot = require('./class');
 const commands = require('./commands');
-
-const token = process.env.BOT_API_TOKEN;
-if (!token) throw new Error('you need to provide the API TOKEN on .env file');
+const { botApiToken } = require('../params');
 
 function initBot() {
-  const bot = new Bot(token, { polling: true });
+  const bot = new Bot(botApiToken, { polling: true });
 
   //TODO: mudar o nome da varivel debaixo
   const commandsArray = commands.map(e => {
@@ -27,6 +25,7 @@ function initBot() {
     try {
       await bot.handleNextAction(chatId, msg);
     } catch (err) {
+      console.log(err)
       await bot.sendMessage(chatId, `deu erro: ${err.message}`);
     }
     await bot.cleanMarkupEntities(chatId, msg.message.message_id);

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server/api/index.js",
     "dev": "nodemon src/server/api/index.js",
-    "test": "nodemon src/server/bot/index.js"
+    "test": "node src/test.js"
   },
   "nodemonConfig": {
     "ignore": [

@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { botApiToken, environment } = require('../params');
 const initBot = require('../bot/index');
 
 const express = require('express');
@@ -22,4 +23,5 @@ app.listen(port, () => {
   console.log(`⚡ Running in http://localhost:${port}`);
 });
 
-if (process.env.BOT_API_TOKEN) initBot();
+if (environment != 'dev') console.log('🚨 The application is not running in the development environment! 🚨');
+if (botApiToken) initBot();

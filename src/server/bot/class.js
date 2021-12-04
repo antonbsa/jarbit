@@ -1,6 +1,7 @@
 const moment = require('moment');
 const TelegramBot = require('node-telegram-bot-api');
 const commands = require('./commands');
+const { debugMode } = require('../params');
 
 class Bot extends TelegramBot {
   constructor(token, options) {
@@ -21,8 +22,8 @@ class Bot extends TelegramBot {
     this.inlineMessages = {};
     setInterval(() => {
       const data = this.nextAction;
-      console.log(new Date(), ' - ', { data });
-    }, 10000);
+      console.log(new Date(), ': ', { data });
+    }, 15000);
     // this.nextAction = {
     //   "chatId": {
     //     action: () => { },
@@ -56,7 +57,7 @@ class Bot extends TelegramBot {
   }
 
   baseLog() {
-    if (process.env.DEBUG === 'true') {
+    if (debugMode) {
       const date = moment(new Date()).format('DD-MMM-YYYY HH:mm:ss');
       const args = Array.prototype.slice.call(arguments);
       args.unshift(`${date} `);

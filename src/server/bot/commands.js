@@ -1,5 +1,6 @@
 const fs = require('fs');
 const api = require('../services/api');
+const { debugMode } = require('../params');
 
 const allCommands = [];
 //TODO: Melhorar onde vai ficar atribuido isso
@@ -43,7 +44,6 @@ setCommand('teste', 'usado para testes', async (msg, bot) => {
   await bot.sendInlineMessage(chatId, 'testezin', defaultOptions);
 
   bot.setNextAction(chatId, 'inline', async (msg) => {
-    console.log('data: ', msg.data)
     const resp = parseInt(msg.data);
     await bot.sendMessage(chatId, `recebi: ${!!resp}`);
   });
@@ -51,24 +51,29 @@ setCommand('teste', 'usado para testes', async (msg, bot) => {
 
 setCommand('start', 'initial setup', async (msg, bot) => {
   const chatId = msg.chat.id;
-  const { data: resp } = await api.get(`/api/user/check-chatid/${chatId}`);
+  const checkResp = await api.get(`/user/check-chatid/${chatId}`);
+  const { success } = checkResp.data;
 
-  if (!resp.data) {
+  if (!success) {
     await bot.sendInlineMessage(chatId, 'Parece que você é novo por aqui! Vou salvar seus dados inicias, ok?', defaultOptions);
     bot.setNextAction(chatId, 'inline', async (msg) => {
       const msgData = parseInt(msg.data);
       if (!!msgData) {
-        const { first_name, last_name, id: chatId, language_code: language } = msg.from;
-        const { status } = await api.post('/api/user/store', {
-          first_name,
-          last_name,
-          chatId,
-          language,
-        });
-
-        if (status == 201) {
-          await bot.sendMessage(chatId, 'Dados salvos!');
+        const { first_name: firstName, last_name: lastName, id: chatId, language_code: language } = msg.from;
+        let resp;
+        try {
+          resp = await api.post('/user/store', {
+            firstName,
+            lastName,
+            chatId,
+            language,
+          });
+        } catch (err) {
+          console.log(debugMode ? err : err.message);
+          await bot.sendMessage(chatId, 'Parece que algo deu errado.. Tente novamente mais tarde, vou tentar corrigir isso!');
         }
+
+        if (resp.status == 201) await bot.sendMessage(chatId, 'Dados salvos!');
       } else {
         await bot.sendMessage(chatId, 'Ok!');
       }
