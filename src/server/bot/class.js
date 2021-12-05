@@ -79,19 +79,27 @@ class Bot extends TelegramBot {
 
   async cleanMarkupEntities(chatId) {
     const messageIdToClear = this.inlineMessages[chatId].messageId;
-    await this.editMessageReplyMarkup(null, { chat_id: chatId, message_id: messageIdToClear });
-    delete this.nextAction.inlineMessageId;
+    try {
+      await this.editMessageReplyMarkup(null, { chat_id: chatId, message_id: messageIdToClear });
+      delete this.nextAction.inlineMessageId;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async sendInlineMessage(chatId, text, options) {
-    const msgSent = await this.sendMessage(chatId, text, {
-      reply_markup: {
-        inline_keyboard: options
-      }
-    });
+    try {
+      const msgSent = await this.sendMessage(chatId, text, {
+        reply_markup: {
+          inline_keyboard: options
+        }
+      });
 
-    this.inlineMessages[chatId] = {
-      messageId: msgSent.message_id
+      this.inlineMessages[chatId] = {
+        messageId: msgSent.message_id
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 

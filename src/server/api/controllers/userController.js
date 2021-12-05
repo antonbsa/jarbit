@@ -14,7 +14,7 @@ async function store(req, res) {
   try {
     const { firstName, lastName, chatId, language } = req.body;
     if (!firstName) {
-      return res.status(400).json({ success: false, error: 'Missing first name argument' });
+      return res.status(400).json({ error: 'Missing first name argument' });
     }
 
     const user = new User({

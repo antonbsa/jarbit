@@ -22,28 +22,31 @@ async function oauthCallback(req, res) {
   }
 
   const opts = { headers: { accept: 'application/json' } };
-  const authResponse = await axios.post(`${githubURL}/login/oauth/access_token`, params, opts);
-  const { access_token } = authResponse.data;
+  try {
+    const authResponse = await axios.post(`${githubURL}/login/oauth/access_token`, params, opts);
+    const { access_token } = authResponse.data;
 
-  const { data } = await axios.get(`${githubApiURL}/user`, { headers: { Authorization: `token ${access_token}` } });
-  const { login: username, location } = data;
+    const { data } = await axios.get(`${githubApiURL}/user`, { headers: { Authorization: `token ${access_token}` } });
+    const { login: username, location } = data;
 
-  // TODO :: try/catch
-  const user = await User.findOne({ userId });
-  const githubData = {
-    access_token: {
-      value: access_token,
-      generated_at: new Date(),
-    },
-    username
+    const user = await User.findOne({ userId });
+    const githubData = {
+      access_token: {
+        value: access_token,
+        generated_at: new Date(),
+      },
+      username,
+    }
+
+    if (location) githubData.location = location;
+
+    user.authentications.github = githubData;
+    await user.save();
+
+    return res.status(200).json({ success: true, message: 'Github data added to user' });
+  } catch (err) {
+    return res.status(400).json({ err: err.message });
   }
-
-  if (location) githubData.location = location;
-
-  user.authentications.github = githubData;
-  await user.save();
-
-  return res.status(200).json({ success: true, message: 'Github data added to user' });
 }
 
 module.exports = {

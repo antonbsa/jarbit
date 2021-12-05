@@ -6,16 +6,16 @@ async function validateChatId(req, res, next) {
   try {
     const user = await User.findOne({ chatId });
     if (!user) {
-      return res.status(400).json({ success: false, error: 'User not found' });
+      return res.status(200).json({ success: false, error: 'User not found' });
     }
 
     res.data = user;
     next();
   } catch (err) {
-    return res.status(400).json({ success: false, error: err.message });
+    return res.status(400).json({ error: err.message });
   }
 }
 
 module.exports = {
-  validateChatId
+  validateChatId,
 }
