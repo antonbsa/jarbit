@@ -59,21 +59,26 @@ setCommand('start', 'initial setup', async (msg, bot) => {
     bot.setNextAction(chatId, 'inline', async (msg) => {
       const msgData = parseInt(msg.data);
       if (!!msgData) {
-        const { first_name: firstName, last_name: lastName, id: chatId, language_code: language } = msg.from;
-        let resp;
+        const {
+          first_name: firstName,
+          last_name: lastName,
+          id: chatId,
+          language_code: language
+        } = msg.from;
+
         try {
-          resp = await api.post('/user/store', {
+          const { status } = await api.post('/user/store', {
             firstName,
             lastName,
             chatId,
             language,
           });
+
+          if (status == 201) await bot.sendMessage(chatId, 'Dados salvos!');
         } catch (err) {
           console.log(debugMode ? err : err.message);
           await bot.sendMessage(chatId, 'Parece que algo deu errado.. Tente novamente mais tarde, vou tentar corrigir isso!');
         }
-
-        if (resp.status == 201) await bot.sendMessage(chatId, 'Dados salvos!');
       } else {
         await bot.sendMessage(chatId, 'Ok!');
       }
