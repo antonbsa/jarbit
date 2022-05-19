@@ -16,6 +16,18 @@ const defaultOptions = [
     }
   ]
 ];
+const defaultOptionsToRedirect = (confirmationUrl) => [
+  [
+    {
+      text: 'Sim',
+      url: confirmationUrl,
+    },
+    {
+      text: 'Não',
+      callback_data: 0,
+    }
+  ]
+];
 
 function setCommand(command, description, action) {
   allCommands.push({
@@ -41,12 +53,10 @@ setCommand('teste', 'usado para testes', async (msg, bot) => {
    * - depois limpa as perguntas
    * -- limpar caso receba mensagem normal (conferir esse comportamento)
    */
-  await bot.sendInlineMessage(chatId, 'testezin', defaultOptions);
+  // await bot.sendMessage(chatId, "<a href='http://127.0.0.1:3000/api/auth/github/authenticate'>Teste</a>", { parse_mode: 'HTML', disable_web_page_preview: true })
+  const options = defaultOptionsToRedirect('https://www.google.com.br');
+  await bot.sendInlineMessage(chatId, 'Teste aqui', options)
 
-  bot.setNextAction(chatId, 'inline', async (msg) => {
-    const resp = parseInt(msg.data);
-    await bot.sendMessage(chatId, `recebi: ${!!resp}`);
-  });
 })
 
 setCommand('start', 'initial setup', async (msg, bot) => {
@@ -67,14 +77,33 @@ setCommand('start', 'initial setup', async (msg, bot) => {
         } = msg.from;
 
         try {
-          const { status } = await api.post('/user/store', {
+          const { status, data: { user } } = await api.post('/user/store', {
             firstName,
             lastName,
             chatId,
             language,
           });
 
-          if (status == 201) await bot.sendMessage(chatId, 'Dados salvos!');
+          if (status == 201) {
+            const { userId } = user;
+            // const options = defaultOptionsToRedirect(`http://127.0.0.1:8000/api/auth/github/authenticate?userId=${userId}`);
+            const options = defaultOptionsToRedirect(`https://www.google.com.br`);
+            console.log(options)
+
+            bot.setNextAction(chatId, 'inline', async (msg) => {
+            await bot.sendInlineMessage(chatId, 'Deseja me conectar com o Github também? (fortemente aconselhável, ein)', options);
+              const msgData = parseInt(msg.data);
+              if (!!msgData) {
+                console.log('accpecter')
+              }
+            }
+              // const { userId } = user;
+              // const { success } = await api.get('/auth/github/authenticate', {
+              //   params: { userId }
+              // })
+              // if (success) await bot.sendMessage(chatId, 'Dados salvos!');
+            )
+          }
         } catch (err) {
           console.log(debugMode ? err : err.message);
           await bot.sendMessage(chatId, 'Parece que algo deu errado.. Tente novamente mais tarde, vou tentar corrigir isso!');

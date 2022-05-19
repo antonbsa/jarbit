@@ -37,6 +37,7 @@
   "devDependencies": {
     "@babel/core": "^7.15.8",
     "@babel/node": "^7.15.8",
+    "concurrently": "^6.4.0",
     "nodemon": "^2.0.13"
   }
 }

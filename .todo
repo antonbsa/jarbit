@@ -35,20 +35,21 @@ TODO:
     ✔ corrigir comando cancel
     ☐ estudar colocar um timeout no inlineMessages tb
     ✔ nao validar um dos ids, sempre o user - independente se vem ou nao do chat, precisa ter sido feito o registro antes de autenticar em algum serviço
-    ☐ correções basicas no mongo (nome de banco e etc);
-      ☐ rever tratamento de requisições
-        ☐ uso de try/catch onde sao chamadas
-        ☐ retorno com status 400 ou 200 mesmo sem dado;
-    ☐ transformar o bot em um webhook :: estudar sobre isso antes
-    ☐ completar o middleware
+    ✔ correções basicas no mongo (nome de banco e etc);
+      ✔ rever tratamento de requisições
+        ✔ uso de try/catch onde sao chamadas
+        ✔ retorno com status 400 ou 200 mesmo sem dado;
+    ✘ transformar o bot em um webhook :: estudar sobre isso antes
+    ✔ completar o middleware :: conforme necessidade, ir acrescentando
     ☐ talvez vou ter que separar os package.json do client e do server :: só conferindo na hora de fazer deploy do monorepo
-    ☐ adicionar campo de fuso-horario
-    ☐ rever sobre o campo de is_waiting_answer. Da atual maneira que é controlado, não precisa dele
+    ✔ rever sobre o campo de is_waiting_answer. Da atual maneira que é controlado, não precisa dele
     ✔ elaborar uma maneira inteligente de pegar os dados pra desenvolvimento
-      ✔ uma env de environment (dev, test, prod) e um file com os params, onde la contém a lógica e entrega dos dados nos devidos locais
-      ✔ log avisando que NAO está rodando em modo de desenvolvedor
-    ☐ adicionar comando /start;
+    ✔ uma env de environment (dev, test, prod) e um file com os params, onde la contém a lógica e entrega dos dados nos devidos locais
+    ✔ log avisando que NAO está rodando em modo de desenvolvedor
+    ✔ criar prototipo de API com node/express e fazer DEPLOY
+    ☐ testar um fluxo com mais mensagens inline
     ☐ aqui deve fazer o login pelo github (exclusivamente aqui, inicialmente) com oAuth;
+      ☐ conferir o esquema de abrir link pelo bot
     ☐ se nao quiser via github, pegar só o chatId :: ou seja, provavelmente vai ter 3 "id" - o _id do mongo, chatId pro bot e o identificador do github
     ☐ adicionar o indice "success" em todos os retornos da api
     ☐ corrigir todos os "todo" comments
@@ -56,6 +57,9 @@ TODO:
     ☐ atualizar o .env.template
     ☐ agora da pra fazer a release;
 TASKS:
+  ☐ aprimorar /start;
+  ☐ adicionar campo de fuso-horario
+    ☐ pegar localização do user (só funciona em mobile)
   ☐ fazer o schema das anotações e demais que ja sei
   ☐ arquivos de tradução :: inicialmente colocar em pt-br, quando colocar em ingles aplicar isso
   ☐ corrigir a definição dos comandos e das callbacks;
@@ -79,6 +83,7 @@ TASKS:
   ☐ (newsletter - como o do deschamps) - integração com o gmail do usuario OU criação de um botEmail específico pra receber isso, sem poluir o pessoal;
   ☐ talvez seja possível fazer um handler da questao anterior (lendo por ID e talvez colocando algum dado extra - i.e type: question - nessa mensagem);
   ☐ adicionar uma mensagem se caso o usuário usar um comando que nao exista;
+  ☐ offline first = deve ter sistema de sincronização de dado separado pra que possa usar offline tb
 
 QUESTIONS:
   - estudar o tipo (e maneira) de salvar os dados. banco noSQL pode ser uma solução;

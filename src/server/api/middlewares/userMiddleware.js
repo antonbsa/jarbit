@@ -1,5 +1,15 @@
 const User = require('../models/User');
 
+async function checkUserData(req, res, next) {
+  const { firstName } = req.body;
+  if (!firstName) {
+    return res.status(400).json({ error: 'Missing first name argument' });
+  }
+
+  res.data = req.body;
+  next();
+}
+
 async function validateChatId(req, res, next) {
   const { chatId } = req.params;
 
@@ -17,5 +27,6 @@ async function validateChatId(req, res, next) {
 }
 
 module.exports = {
+  checkUserData,
   validateChatId,
 }

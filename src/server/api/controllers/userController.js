@@ -12,10 +12,12 @@ async function index(req, res) {
 
 async function store(req, res) {
   try {
-    const { firstName, lastName, chatId, language } = req.body;
-    if (!firstName) {
-      return res.status(400).json({ error: 'Missing first name argument' });
-    }
+    const {
+      firstName,
+      lastName,
+      chatId,
+      language
+    } = res.data;
 
     const user = new User({
       userId: uuid(),
@@ -26,7 +28,7 @@ async function store(req, res) {
     });
 
     await user.save();
-    return res.status(201).json({ message: 'User added succesfully!' });
+    return res.status(201).json({ user, message: 'User added succesfully!' });
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
@@ -34,7 +36,7 @@ async function store(req, res) {
 
 async function checkChatId(req, res) {
   try {
-    const chatId = req.params.id;
+    const { id: chatId } = req.params;
     const user = await User.findOne({ chatId });
     if (!user) {
       return res.status(200).json({ success: false, error: 'User not found' });

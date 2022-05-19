@@ -18,6 +18,26 @@ function initBot() {
 
   //TODO: add message to a new user
 
+  bot.onText(/getLocation/, (msg) => {
+    const opts = {
+      reply_markup: JSON.stringify({
+        keyboard: [
+          [{text: 'Location', request_location: true}],
+          [{text: 'Contact', request_contact: true}],
+        ],
+        resize_keyboard: true,
+        one_time_keyboard: true,
+      }),
+    };
+    bot.sendMessage(msg.chat.id, 'Contact and Location request', opts);
+    bot.on('location', (msg) => {
+      console.log('=== location')
+      console.log(msg)
+      // console.log(msg.location.latitude);
+      // console.log(msg.location.longitude);
+    });
+  });
+
   bot.on('callback_query', async (msg) => {
     const message = msg.message;
     const chatId = message.chat.id;
@@ -25,7 +45,7 @@ function initBot() {
     try {
       await bot.handleNextAction(chatId, msg);
     } catch (err) {
-      console.log(err)
+       (err)
       await bot.sendMessage(chatId, `deu erro: ${err.message}`);
     }
     await bot.cleanMarkupEntities(chatId, msg.message.message_id);
@@ -33,6 +53,8 @@ function initBot() {
 
   bot.on('message', async (msg) => {
     //TODO: check the change from excessive if/else to if/return
+    console.log('== generico')
+    console.log(msg)
     const chatId = msg.chat.id;
     const msgText = msg.text;
     const nextAction = bot.nextAction[chatId];
